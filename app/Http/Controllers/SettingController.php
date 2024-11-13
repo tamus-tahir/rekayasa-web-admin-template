@@ -12,39 +12,11 @@ class SettingController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Setting $setting)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Setting $setting)
-    {
-        //
+        $data = [
+            'title' => 'Setting',
+            'setting' => Setting::get()->first()
+        ];
+        return view('setting.index', $data);
     }
 
     /**
@@ -52,14 +24,15 @@ class SettingController extends Controller
      */
     public function update(Request $request, Setting $setting)
     {
-        //
-    }
+        $validated = $request->validate([
+            'app_name' => 'required',
+            'login_title' => 'required',
+            'copyright' => 'required',
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Setting $setting)
-    {
-        //
+        $validated['description'] = $request->description;
+        $validated['keywords'] = $request->keywords;
+        $setting->update($validated);
+        return redirect()->route('setting.index')->with('success', successUpdateMessage());
     }
 }

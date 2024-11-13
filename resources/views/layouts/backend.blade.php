@@ -124,7 +124,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="index.html">
+                <a class="nav-link collapsed" href="{{ route('setting.index') }}">
                     <i class='bx bx-cog'></i>
                     <span>Setting</span>
                 </a>
@@ -137,7 +137,7 @@
     <main id="main" class="main">
 
         <div class="pagetitle card shadow p-3">
-            <h1>Blank Page</h1>
+            <h1>{{ $title }}</h1>
         </div>
 
         {{ $slot }}
@@ -161,7 +161,12 @@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
 
+    <div id="alert-success" data-messsage="{{ session('success') ? session('success') : '' }}"></div>
+
+    @stack('modal')
+
     <!-- Vendor JS Files -->
+    <script src="{{ asset('backend/vendor/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/chart.js/chart.umd.js') }}"></script>
@@ -170,9 +175,31 @@
     <script src="{{ asset('backend/vendor/simple-datatables/simple-datatables.js') }}"></script>
     <script src="{{ asset('backend/vendor/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/php-email-form/validate.js') }}"></script>
+    <script src="{{ asset('backend/vendor/parsley/parsley.min.js') }}"></script>
+    <script src="{{ asset('backend/vendor/sweetalert2/sweetalert2@11') }}"></script>
 
     <!-- Template Main JS File -->
     <script src="{{ asset('backend/js/main.js') }}"></script>
+    <script>
+        $('#form').parsley({
+            errorClass: 'is-invalid text-red',
+            successClass: 'is-valid',
+            errorsWrapper: '<span class="invalid-feedback"></span>',
+            errorTemplate: '<span></span>',
+            trigger: 'change'
+        });
+
+        let alertSuccess = $('#alert-success').data('messsage')
+        if (alertSuccess) {
+            Swal.fire({
+                title: "Good job!",
+                text: alertSuccess,
+                icon: "success",
+                timer: 1500
+            });
+        }
+    </script>
+    @stack('script')
 
 </body>
 
