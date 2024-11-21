@@ -5,14 +5,19 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Components / Accordion - NiceAdmin Bootstrap Template</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+    @php
+        $setting = getSetting();
+    @endphp
+
+    <title>{{ $setting->app_name }} | {{ $title }}</title>
+    <meta content="{{ $setting->description }}" name="description">
+    <meta content="{{ $setting->keywords }}" name="keywords">
+    <meta content="Tamus Tahir" name="author">
 
     <!-- Favicons -->
 
-    <link href="{{ asset('backend/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('backend/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ $setting->icon ? asset('storage/' . $setting->icon) : asset('backend/img/logo.png') }}"
+        rel="icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -22,12 +27,14 @@
 
     <!-- Vendor CSS Files -->
     <link href="{{ asset('backend/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- datatables -->
+    <link href="{{ asset('backend/vendor/datatables/dataTables.bootstrap5.css') }}" rel="stylesheet">
+
     <link href="{{ asset('backend/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/vendor/quill/quill.snow.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
-    <link href="{{ asset('backend/vendor/simple-datatables/style.css') }}" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('backend/css/style.css') }}" rel="stylesheet">
@@ -49,8 +56,9 @@
         <div class="d-flex align-items-center justify-content-between">
             <a href="index.html" class="logo d-flex align-items-center">
 
-                <img src="{{ asset('backend/img/logo.png') }}" alt="">
-                <span class="d-none d-lg-block">NiceAdmin</span>
+                <img src="{{ $setting->icon ? asset('storage/' . $setting->icon) : asset('backend/img/logo.png') }}"
+                    alt="">
+                <span class="d-none d-lg-block">{{ $setting->app_name }}</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
@@ -130,6 +138,13 @@
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('user.index') }}">
+                    <i class='bx bx-user-pin'></i>
+                    <span>User</span>
+                </a>
+            </li>
+
         </ul>
 
     </aside><!-- End Sidebar-->
@@ -147,7 +162,7 @@
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">
         <div class="copyright">
-            &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+            &copy; Copyright <strong><span>{{ $setting->copyright }}</span></strong>
         </div>
         <div class="credits">
             <!-- All the links in the footer should remain intact. -->
@@ -169,10 +184,14 @@
     <script src="{{ asset('backend/vendor/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- datatables -->
+    <script src="{{ asset('backend/vendor/datatables/dataTables.js') }}"></script>
+    <script src="{{ asset('backend/vendor/datatables/dataTables.bootstrap5.js') }}"></script>
+
+
     <script src="{{ asset('backend/vendor/chart.js/chart.umd.js') }}"></script>
     <script src="{{ asset('backend/vendor/echarts/echarts.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/quill/quill.js') }}"></script>
-    <script src="{{ asset('backend/vendor/simple-datatables/simple-datatables.js') }}"></script>
     <script src="{{ asset('backend/vendor/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/php-email-form/validate.js') }}"></script>
     <script src="{{ asset('backend/vendor/parsley/parsley.min.js') }}"></script>
@@ -181,6 +200,8 @@
     <!-- Template Main JS File -->
     <script src="{{ asset('backend/js/main.js') }}"></script>
     <script>
+        new DataTable('#example');
+
         $('#form').parsley({
             errorClass: 'is-invalid text-red',
             successClass: 'is-valid',

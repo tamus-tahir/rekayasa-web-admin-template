@@ -51,12 +51,12 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label for="keyword" class="form-label">
-                        Keyword
+                    <label for="keywords" class="form-label">
+                        Keywords
                     </label>
-                    <input type="text" class="form-control @error('keyword') is-invalid @enderror " id="keyword"
-                        name="keyword" value="{{ old('keyword', $setting->keyword) }}">
-                    @error('keyword')
+                    <input type="text" class="form-control @error('keywords') is-invalid @enderror " id="keywords"
+                        name="keywords" value="{{ old('keywords', $setting->keywords) }}">
+                    @error('keywords')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -76,6 +76,18 @@
                     @enderror
                 </div>
 
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="icon" class="form-label">
+                            Upload Icon
+                            <span class="text-danger">(Type Image, Max Size 500kb)</span>
+                        </label>
+                        <input class="form-control" type="file" id="upload" name="icon">
+                    </div>
+                    <img src="{{ $setting->icon ? asset('storage/' . $setting->icon) : asset('backend/img/logo.png') }}"
+                        alt="" class="w-50" id="preview">
+                </div>
+
             </div>
 
 
@@ -89,6 +101,11 @@
     @endpush
 
     @push('script')
+        <script>
+            $('#upload').on('change', function(event) {
+                $('#preview').attr('src', URL.createObjectURL(event.target.files[0]))
+            })
+        </script>
     @endpush
 
 </x-backend>
