@@ -20,7 +20,6 @@
                 </thead>
                 <tbody>
 
-
                     @foreach ($users as $user)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
@@ -28,7 +27,12 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->role }}</td>
                             <td>
-
+                                <a href="{{ route('user.show', $user) }}" class="btn btn-info">
+                                    <i class='bx bx-show'></i>
+                                </a>
+                                <a href="{{ route('user.edit', $user) }}" class="btn btn-warning">
+                                    <i class='bx bx-edit'></i>
+                                </a>
                             </td>
                         </tr>
                     @endforeach
