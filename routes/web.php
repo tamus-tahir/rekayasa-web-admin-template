@@ -1,25 +1,27 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/dashboard', function () {
-    return view('dashboard', ['title' => 'Dashboard']);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', [AuthenticatedSessionController::class, 'create'])
+    ->name('login');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/profile', [DashboardController::class, 'show'])->name('dashboard.show');
+    Route::get('/dashboard/edit', [DashboardController::class, 'edit'])->name('dashboard.edit');
+    Route::put('/dashboard/update', [DashboardController::class, 'update'])->name('dashboard.update');
 
-    Route::resource('/setting', SettingController::class);
-    Route::resource('/user', UserController::class);
+    Route::resource('/setting', SettingController::class)->middleware('role:superadmin');
+    Route::resource('/user', UserController::class)->middleware('role:superadmin');
 });
 
 require __DIR__ . '/auth.php';

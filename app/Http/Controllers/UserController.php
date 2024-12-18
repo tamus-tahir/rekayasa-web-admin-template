@@ -121,8 +121,14 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        if ($user->avatar) {
+            if (Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+        }
+        return redirect()->route('user.index')->with('success', successDeleteMessage());
     }
 }

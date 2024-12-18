@@ -33,6 +33,10 @@
                                 <a href="{{ route('user.edit', $user) }}" class="btn btn-warning">
                                     <i class='bx bx-edit'></i>
                                 </a>
+                                <button type="button" class="btn btn-danger btn-delete" data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal" data-route="{{ route('user.destroy', $user) }}">
+                                    <i class='bx bx-trash'></i>
+                                </button>
                             </td>
                         </tr>
                     @endforeach
@@ -45,9 +49,33 @@
     </section>
 
     @push('modal')
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+
+                <form action="" method="post" id="form-delete">
+                    @csrf
+                    @method('delete')
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Are You Sure?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Yes, Delete It!</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
     @endpush
 
     @push('script')
+        <script>
+            $('#example').on('click', '.btn-delete', function() {
+                $('#form-delete').attr('action', $(this).data('route'))
+            })
+        </script>
     @endpush
 
 </x-backend>

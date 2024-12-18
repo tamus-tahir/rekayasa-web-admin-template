@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Setting;
+use Illuminate\Support\Facades\Auth;
 
 function successCreateMessage()
 {
@@ -20,4 +21,9 @@ function successDeleteMessage()
 function getSetting()
 {
   return Setting::get()->first();
+}
+
+function account()
+{
+  return Auth::user();
 }

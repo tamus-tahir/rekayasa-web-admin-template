@@ -70,22 +70,22 @@
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
                         data-bs-toggle="dropdown">
-                        <img src="{{ Auth::user()->avatar ? '' : asset('backend/img/noprofil.png') }}" alt="Profile"
-                            class="rounded-circle">
-                        <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->name }}</span>
+                        <img src="{{ account()->avatar ? asset('storage/' . account()->avatar) : asset('backend/img/noprofil.png') }}"
+                            alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2">{{ account()->name }}</span>
                     </a><!-- End Profile Iamge Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
-                            <h6>{{ Auth::user()->name }}</h6>
-                            <span>{{ Auth::user()->role }}</span>
+                            <h6>{{ account()->name }}</h6>
+                            <span>{{ account()->role }}</span>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('dashboard.show') }}">
                                 <i class="bi bi-person"></i>
                                 <span>My Profile</span>
                             </a>
@@ -95,7 +95,7 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('dashboard.edit') }}">
                                 <i class="bi bi-gear"></i>
                                 <span>Account Settings</span>
                             </a>
@@ -105,7 +105,8 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                            <a class="dropdown-item d-flex align-items-center" href="#" data-bs-toggle="modal"
+                                data-bs-target="#logoutModal">
                                 <i class="bi bi-box-arrow-right"></i>
                                 <span>Sign Out</span>
                             </a>
@@ -131,19 +132,22 @@
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('setting.index') }}">
-                    <i class='bx bx-cog'></i>
-                    <span>Setting</span>
-                </a>
-            </li>
+            @if (account()->role == 'superadmin')
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="{{ route('setting.index') }}">
+                        <i class='bx bx-cog'></i>
+                        <span>Setting</span>
+                    </a>
+                </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('user.index') }}">
-                    <i class='bx bx-user-pin'></i>
-                    <span>User</span>
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="{{ route('user.index') }}">
+                        <i class='bx bx-user-pin'></i>
+                        <span>User</span>
+                    </a>
+                </li>
+            @endif
+
 
         </ul>
 
@@ -179,6 +183,27 @@
     <div id="alert-success" data-messsage="{{ session('success') ? session('success') : '' }}"></div>
 
     @stack('modal')
+
+    <!-- Modal Logout -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <form action="{{ route('logout') }}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        Are you sure you want to log out?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-primary">Yes</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <!-- end Modal Logout -->
 
     <!-- Vendor JS Files -->
     <script src="{{ asset('backend/vendor/jquery/jquery-3.7.1.min.js') }}"></script>
